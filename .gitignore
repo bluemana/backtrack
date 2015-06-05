@@ -1,0 +1,5 @@
+# Ignore OS X directory files
+.DS_Store
+
+# Ignore compiled files
+bin/
