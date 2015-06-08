@@ -76,6 +76,15 @@ public class Board {
 		return positions[piece.getId()];
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * It is not guaranteed that this method returns a board in <i>standard format</i>.
+	 * If a <i>standard format</i> representation is needed, use
+	 * {@link backtrack.util.StandardFormatUtils#format(Board)} instead.
+	 * </p>
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
