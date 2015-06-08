@@ -9,6 +9,17 @@ public class Board {
 	private final Piece[] pieces;
 	private final Position[] positions;
 	
+	/**
+	 * <p>
+	 * Constructs a new sliding tile board. The expected behaviour is guaranteed
+	 * only if <code>piecesCount</code> pieces are correctly placed on the board
+	 * after this <code>Board</code> is constructed.
+	 * </p>
+	 * 
+	 * @param rows the number of rows of the board
+	 * @param cols the number of columns of the board
+	 * @param piecesCount the number of pieces that will be placed on the board
+	 */
 	public Board(int rows, int cols, int piecesCount) {
 		this.rows = rows;
 		this.cols = cols;
@@ -58,20 +69,11 @@ public class Board {
 	}
 	
 	public Piece pieceAt(Position position) {
-		Piece result = null;
-		if (position.getRow() >= 0 && position.getRow() < rows &&
-				position.getCol() >= 0 && position.getCol() < cols) {
-			result = board[position.getRow()][position.getCol()];
-		}
-		return result;
+		return board[position.getRow()][position.getCol()];
 	}
 	
 	public Position positionOf(Piece piece) {
-		Position result = null;
-		if (piece.getId() >= 0 && piece.getId() < pieces.length) {
-			result = positions[piece.getId()];
-		}
-		return result;
+		return positions[piece.getId()];
 	}
 	
 	@Override

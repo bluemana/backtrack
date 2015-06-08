@@ -12,7 +12,7 @@ public class BoardTest {
 	
 	@Test
 	public void place_ValidPlacement_Placed() {
-		Board board = new Board(4, 3, 2);
+		Board board = new Board(4, 3, 1);
 		Piece piece = new Piece(0, 1, 2);
 		Position position = new Position(2, 1);
 		board.place(piece, position);
