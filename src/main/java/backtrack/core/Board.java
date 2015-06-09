@@ -1,5 +1,10 @@
 package backtrack.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import backtrack.core.Move.Direction;
+
 
 public class Board {
 	
@@ -74,6 +79,99 @@ public class Board {
 	
 	public Position positionOf(Piece piece) {
 		return positions[piece.getId()];
+	}
+	
+	/**
+	 * Returns a list of valid moves.
+	 * 
+	 * @return a list of valid moves
+	 */
+	public List<Move> moves() {
+		List<Move> result = new ArrayList<Move>();
+		for (Piece piece : pieces) {
+			result.addAll(moves(piece));
+		}
+		return result;
+	}
+	
+	private List<Move> moves(Piece piece) {
+		List<Move> result = new ArrayList<Move>();
+		Position position = positions[piece.getId()];
+		int height = piece.getHeight();
+		int width = piece.getWidth();
+		// Direction.UP
+		int row = position.getRow();
+		int col = position.getCol();
+		boolean canMove = true;
+		int cells = 0;
+		while (canMove && row > 0) {
+			for (int j = col; j < col + width; j++) {
+				if (board[row - 1][j] != null) {
+					canMove = false;
+					break;
+				}
+			}
+			if (canMove) {
+				cells++;
+				result.add(new Move(piece.getId(), Direction.UP, cells));
+			}
+			row--;
+		}
+		// Direction.DOWN
+		row = position.getRow();
+		col = position.getCol();
+		canMove = true;
+		cells = 0;
+		while (canMove && row + height < rows) {
+			for (int j = col; j < col + width; j++) {
+				if (board[row + height][j] != null) {
+					canMove = false;
+					break;
+				}
+			}
+			if (canMove) {
+				cells++;
+				result.add(new Move(piece.getId(), Direction.DOWN, cells));
+			}
+			row++;
+		}
+		// Direction.LEFT
+		row = position.getRow();
+		col = position.getCol();
+		canMove = true;
+		cells = 0;
+		while (canMove && col > 0) {
+			for (int i = row; i < row + height; i++) {
+				if (board[i][col - 1] != null) {
+					canMove = false;
+					break;
+				}
+			}
+			if (canMove) {
+				cells++;
+				result.add(new Move(piece.getId(), Direction.LEFT, cells));
+			}
+			col--;
+		}
+		// Direction.RIGHT
+		row = position.getRow();
+		col = position.getCol();
+		canMove = true;
+		cells = 0;
+		while (canMove && col + width < cols) {
+			for (int i = row; i < row + height; i++) {
+				if (board[i][col + width] != null) {
+					canMove = false;
+					break;
+				}
+			}
+			if (canMove) {
+				cells++;
+				result.add(new Move(piece.getId(), Direction.RIGHT, cells));
+			}
+			col++;
+		}
+		return result;
 	}
 	
 	/**
