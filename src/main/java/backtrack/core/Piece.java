@@ -2,7 +2,23 @@ package backtrack.core;
 
 import java.util.Objects;
 
-
+/**
+ * <p>
+ * <b>Design note:</b>
+ * </p>
+ * <p>
+ * As an experiment in keeping cohesion as high as possible, a piece is considered
+ * independently of its position on a board in the sense of "a piece is a rectangular
+ * tile", rather than "a piece is a rectangular tile placed on a board". A
+ * {@link Board} is responsible for keeping pieces in position.
+ * </p>
+ * <p>
+ * Consistent with the level of abstraction of the definition of a piece as a
+ * rectangular tile, two pieces are considered equal if their dimensions are equal,
+ * regardless of their ID. Hence, a piece ID is mostly a helper field for a
+ * <code>Board</code>.
+ * </p>
+ */
 public class Piece {
 	
 	private final int id;
