@@ -1,6 +1,7 @@
 package backtrack.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import backtrack.core.Move.Direction;
@@ -71,6 +72,19 @@ public class Board {
 			}
 		}
 		return result;
+	}
+	
+	private void remove(Piece piece) {
+		Position position = positions[piece.getId()];
+		int row = position.getRow();
+		int col = position.getCol();
+		for (int i = row; i < row + piece.getHeight(); i++) {
+			for (int j = col; j < col + piece.getWidth(); j++) {
+				board[i][j] = null;
+			}
+		}
+		pieces[piece.getId()] = null;
+		positions[piece.getId()] = null;
 	}
 	
 	public Piece pieceAt(Position position) {
@@ -170,6 +184,55 @@ public class Board {
 				result.add(new Move(piece.getId(), Direction.RIGHT, cells));
 			}
 			col++;
+		}
+		return result;
+	}
+	
+	public void apply(Move move) {
+		if (canApply(move)) {
+			Piece piece = pieces[move.getPieceId()];
+			Direction direction = move.getDirection();
+			Position position = positions[piece.getId()];
+			int row = position.getRow();
+			int col = position.getCol();
+			if (direction == Direction.UP) {
+				row -= move.getCells();
+			} else if (direction == Direction.DOWN) {
+				row += move.getCells();
+			} else if (direction == Direction.RIGHT) {
+				col += move.getCells();
+			} else if (direction == Direction.LEFT) {
+				col -= move.getCells();
+			}
+			remove(piece);
+			place(piece, new Position(row, col));
+		} else {
+			throw new IllegalArgumentException("Invalid move " + move);
+		}
+	}
+	
+	private boolean canApply(Move move) {
+		return moves().contains(move);
+	}
+	
+	@Override
+	public int hashCode() {
+		Object[] hash = new Object[pieces.length + positions.length];
+		for (int i = 0; i < pieces.length; i++) {
+			hash[i] = pieces[i];
+		}
+		for (int i = 0; i < positions.length; i++) {
+			hash[pieces.length + i] = positions[i];
+		}
+		return Arrays.deepHashCode(hash);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = false;
+		if (obj != null && obj instanceof Board) {
+			Board b = (Board) obj;
+			result = Arrays.deepEquals(pieces, b.pieces) && Arrays.deepEquals(positions, b.positions);
 		}
 		return result;
 	}
