@@ -34,6 +34,13 @@ public class Board {
 		positions = new Position[piecesCount];
 	}
 	
+	public Board(Board board) {
+		this(board.rows, board.cols, board.pieces.length);
+		for (int i = 0; i < board.pieces.length; i++) {
+			place(board.pieces[i], board.positions[i]);
+		}
+	}
+	
 	public void place(Piece piece, Position position) {
 		if (canPlace(piece, position)) {
 			int row = position.getRow();
@@ -235,6 +242,14 @@ public class Board {
 			result = Arrays.deepEquals(pieces, b.pieces) && Arrays.deepEquals(positions, b.positions);
 		}
 		return result;
+	}
+	
+	public boolean equals(Board board, int pieceId) {
+		return board != null && rows == board.rows && cols == board.cols &&
+				pieceId >= 0 && pieceId < pieces.length && pieces[pieceId] != null
+				&& pieceId < board.pieces.length && board.pieces[pieceId] != null &&
+				pieces[pieceId].equals(board.pieces[pieceId]) &&
+				positions[pieceId].equals(board.positions[pieceId]);
 	}
 	
 	/**

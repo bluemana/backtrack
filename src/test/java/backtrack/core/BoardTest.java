@@ -234,4 +234,23 @@ public class BoardTest {
 		Assert.assertTrue(board1.equals(board2));
 		Assert.assertTrue(board1.hashCode() == board2.hashCode());
 	}
+	
+	@Test
+	public void equals_EqualBoardsByPieceId_Equal() throws IOException {
+		String boardString1 =
+				"1 1 2 2\n" +
+				"1 1 3 4\n" +
+				". . 3 4\n" +
+				"5 6 6 7\n" +
+				"5 8 8 0\n";
+		String boardString2 =
+				"1 1 . .\n" +
+				"1 1 . .\n" +
+				". . . .\n" +
+				"0 2 2 3\n" +
+				"0 4 4 5\n";
+		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
+		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
+		Assert.assertTrue(board1.equals(board2, 1));
+	}
 }
