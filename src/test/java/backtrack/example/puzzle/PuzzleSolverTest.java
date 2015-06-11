@@ -1,4 +1,4 @@
-package backtrack;
+package backtrack.example.puzzle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,8 +8,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import backtrack.core.Board;
-import backtrack.util.StandardFormatUtils;
+import backtrack.example.puzzle.PuzzleSolver;
+import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.util.StandardFormatUtils;
 
 public class PuzzleSolverTest {
 

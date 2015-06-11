@@ -1,11 +1,11 @@
-package backtrack.util;
+package backtrack.example.puzzle.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import backtrack.core.Board;
-import backtrack.core.Piece;
-import backtrack.core.Position;
+import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.core.Piece;
+import backtrack.example.puzzle.core.Position;
 
 /**
  * <p>

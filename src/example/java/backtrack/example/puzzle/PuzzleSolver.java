@@ -1,4 +1,4 @@
-package backtrack;
+package backtrack.example.puzzle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import backtrack.core.Board;
-import backtrack.core.Move;
+import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.core.Move;
 
 public class PuzzleSolver {
 

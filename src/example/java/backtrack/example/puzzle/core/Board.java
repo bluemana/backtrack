@@ -1,10 +1,10 @@
-package backtrack.core;
+package backtrack.example.puzzle.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import backtrack.core.Move.Direction;
+import backtrack.example.puzzle.core.Move.Direction;
 
 
 public class Board {
@@ -258,7 +258,7 @@ public class Board {
 	 * <p>
 	 * It is not guaranteed that this method returns a board in <i>standard format</i>.
 	 * If a <i>standard format</i> representation is needed, use
-	 * {@link backtrack.util.StandardFormatUtils#format(Board)} instead.
+	 * {@link backtrack.example.puzzle.util.StandardFormatUtils#format(Board)} instead.
 	 * </p>
 	 */
 	@Override

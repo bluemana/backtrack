@@ -1,4 +1,4 @@
-package backtrack.core;
+package backtrack.example.puzzle.core;
 
 import java.util.Objects;
 

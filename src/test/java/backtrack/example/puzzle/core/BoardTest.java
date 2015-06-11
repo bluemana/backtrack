@@ -1,4 +1,4 @@
-package backtrack.core;
+package backtrack.example.puzzle.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +11,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import backtrack.core.Move.Direction;
-import backtrack.util.StandardFormatUtils;
+import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.core.Move;
+import backtrack.example.puzzle.core.Piece;
+import backtrack.example.puzzle.core.Position;
+import backtrack.example.puzzle.core.Move.Direction;
+import backtrack.example.puzzle.util.StandardFormatUtils;
 
 public class BoardTest {
 

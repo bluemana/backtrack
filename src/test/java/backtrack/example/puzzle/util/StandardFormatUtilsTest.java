@@ -1,4 +1,4 @@
-package backtrack.util;
+package backtrack.example.puzzle.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import backtrack.core.Board;
+import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.util.StandardFormatUtils;
 
 public class StandardFormatUtilsTest {
 
