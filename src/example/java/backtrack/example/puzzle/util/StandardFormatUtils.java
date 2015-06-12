@@ -15,8 +15,10 @@ import backtrack.example.puzzle.core.Position;
  * The <i>standard format</i> of a board is such that:<br>
  * <ul>
  *   <li>Pieces are identified by a numerical ID</li>
- *   <li>IDs are numbered from 0 to N - 1, where N is the number of pieces on the board</li>
- *   <li>Pieces are arranged on the cells of a MxN matrix of M rows and N columns</li>
+ *   <li>IDs are numbered from <code>0</code> to <code>N - 1</code>, where <code>N</code>
+ *   is the number of pieces on the board</li>
+ *   <li>Pieces are arranged on the cells of a <code>MxN</code> matrix of <code>M</code> rows
+ *   and <code>N</code> columns</li>
  *   <li>Each non-empty cell is marked with the ID of the piece it contains</li>
  *   <li>Empty cells are market with the dot character '.'</li>
  * </ul>

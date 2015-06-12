@@ -14,10 +14,10 @@ public interface Tuple<E> {
 	public List<E> nextElements();
 	
 	/**
-	 * Returns the element that was used to construct this tuple, or <code>null</code>
-	 * if this is the empty tuple.
+	 * Returns the last element that was used to construct this tuple, or
+	 * <code>null</code> if this is the empty tuple.
 	 * 
-	 * @return the element that was used to construct this tuple
+	 * @return the last element that was used to construct this tuple
 	 */
 	public E lastElement();
 	

@@ -15,8 +15,7 @@ import java.util.Objects;
  * <p>
  * Consistent with the level of abstraction of the definition of a piece as a
  * rectangular tile, two pieces are considered equal if their dimensions are equal,
- * regardless of their ID. Hence, a piece ID is mostly a helper field for a
- * <code>Board</code>.
+ * regardless of their ID.
  * </p>
  */
 public class Piece {

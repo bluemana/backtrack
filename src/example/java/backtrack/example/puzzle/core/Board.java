@@ -258,7 +258,7 @@ public class Board {
 	 * <p>
 	 * It is not guaranteed that this method returns a board in <i>standard format</i>.
 	 * If a <i>standard format</i> representation is needed, use
-	 * {@link backtrack.example.puzzle.util.StandardFormatUtils#format(Board)} instead.
+	 * {@link backtrack.example.puzzle.util.StandardFormatUtils#format(Board) StandardFormatUtils.format(Board)} instead.
 	 * </p>
 	 */
 	@Override
