@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import backtrack.example.puzzle.PuzzleSolver;
 import backtrack.example.puzzle.core.Board;
+import backtrack.example.puzzle.core.Move;
 import backtrack.example.puzzle.util.StandardFormatUtils;
 
 public class PuzzleSolverTest {
@@ -30,8 +30,12 @@ public class PuzzleSolverTest {
 				". . . .\n";
 		Board startBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(startBoardString)), 5, 4);
 		Board targetBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(targetBoardString)), 5, 4);
-		PuzzleSolver solver = new PuzzleSolver(startBoard, targetBoard, 1);
-		List<Board> solution = solver.solve();
+		PuzzleSolver solver = new PuzzleSolver();
+		solver.setStartBoard(startBoard);
+		solver.setTargetBoard(targetBoard);
+		solver.setTargetPieceId(1);
+		List<Move> moves = solver.solve();
+		List<Board> solution = PuzzleSolver.boards(startBoard, moves);
 		Assert.assertTrue(solution != null && solution.size() == 1 && solution.get(0).equals(startBoard));
 	}
 	
@@ -51,8 +55,12 @@ public class PuzzleSolverTest {
 				"8 7 7 4\n";
 		Board startBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(startBoardString)), 5, 4);
 		Board targetBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(targetBoardString)), 5, 4);
-		PuzzleSolver solver = new PuzzleSolver(startBoard, targetBoard, 0);
-		List<Board> solution = solver.solve();
+		PuzzleSolver solver = new PuzzleSolver();
+		solver.setStartBoard(startBoard);
+		solver.setTargetBoard(targetBoard);
+		solver.setTargetPieceId(0);
+		List<Move> moves = solver.solve();
+		List<Board> solution = PuzzleSolver.boards(startBoard, moves);
 		Assert.assertTrue(solution != null && solution.size() - 1 == 93);
 	}
 }

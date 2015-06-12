@@ -1,110 +1,92 @@
 package backtrack.example.puzzle;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
+import backtrack.Backtracker;
+import backtrack.Tuple;
 import backtrack.example.puzzle.core.Board;
 import backtrack.example.puzzle.core.Move;
 
-public class PuzzleSolver {
+public class PuzzleSolver extends Backtracker<Move> {
 
-	public static final int DEFAULT_MAX_VISITS = 100000;
-	
-	private static class SolverBoard extends Board {
+	private class BoardTuple extends Board implements Tuple<Move> {
 		
-		private final SolverBoard previousBoard;
+		private final BoardTuple previousTuple;
+		private final Move lastMove;
 		
-		public SolverBoard(Board board, SolverBoard previousBoard) {
+		public BoardTuple(Board board, BoardTuple previousTuple, Move lastMove) {
 			super(board);
-			this.previousBoard = previousBoard;
+			this.previousTuple = previousTuple;
+			this.lastMove = lastMove;
+		}
+
+		@Override
+		public boolean isSolution() {
+			return equals(target, targetPieceId);
+		}
+
+		@Override
+		public List<Move> nextElements() {
+			return moves();
 		}
 		
-		public SolverBoard getPreviousBoard() {
-			return previousBoard;
+		@Override
+		public Move lastElement() {
+			return lastMove;
+		}
+
+		@Override
+		public Tuple<Move> next(Move move) {
+			Board next = new Board(this);
+			next.apply(move);
+			return new BoardTuple(next, this, move);
+		}
+
+		@Override
+		public Tuple<Move> previous() {
+			return previousTuple;
 		}
 	}
 
-	private final Board start;
-	private final Board target;
-	private final int targetPieceId;
-	private int maxVisits;
-	private int visitsCount;
-	private List<Board> result;
-
-	public PuzzleSolver(Board start, Board target, int targetPieceId) {
+	private Board start;
+	private Board target;
+	private int targetPieceId;
+	
+	public void setStartBoard(Board start) {
 		this.start = start;
-		this.target = target;
-		this.targetPieceId = targetPieceId;
-		maxVisits = DEFAULT_MAX_VISITS;
-		visitsCount = -1;
+		setStart(new BoardTuple(start, null, null));
 	}
-
-	public Board getStart() {
+	
+	public Board getStartBoard() {
 		return start;
 	}
 
-	public Board getTarget() {
+	public Board getTargetBoard() {
 		return target;
 	}
-
+	
+	public void setTargetBoard(Board target) {
+		this.target = target;
+	}
+	
 	public int getTargetPieceId() {
 		return targetPieceId;
 	}
-
-	public void setMaxVisits(int maxVisits) {
-		this.maxVisits = maxVisits;
+	
+	public void setTargetPieceId(int targetPieceId) {
+		this.targetPieceId = targetPieceId;
 	}
-
-	public int getMaxVisits() {
-		return maxVisits;
-	}
-
-	public int getVisitsCount() {
-		return visitsCount;
-	}
-
-	public List<Board> solve() {
-		return solve(start);
-	}
-
-	private List<Board> solve(Board start) {
-		Queue<SolverBoard> traversalQueue = new LinkedList<SolverBoard>();
-		Set<SolverBoard> visitedSet = new HashSet<SolverBoard>();
-		visitsCount = 0;
-		traversalQueue.add(new SolverBoard(start, null));
-		while (!traversalQueue.isEmpty()) {
-			SolverBoard current = traversalQueue.poll();
-			if (visitsCount < maxVisits && !visitedSet.contains(current)) {
-				// Mark as visited
-				visitedSet.add(current);
-				visitsCount++;
-				// Continue
-				if (!current.equals(getTarget(), getTargetPieceId())) {
-					for (Move move : current.moves()) {
-						SolverBoard next = new SolverBoard(current, current);
-						next.apply(move);
-						traversalQueue.add(next);
-					}
-				} else {
-					result = path(current);
-					break;
-				}
-			}
-		}
-		return result;
-	}
-
-	private List<Board> path(SolverBoard last) {
+	
+	public static List<Board> boards(Board start, List<Move> moves) {
 		List<Board> result = new ArrayList<Board>();
-		do {
-			result.add(last);
-		} while ((last = last.getPreviousBoard()) != null);
-		Collections.reverse(result);
+		Board current = new Board(start);
+		result.add(current);
+		for (Move move : moves) {
+			current = new Board(current);
+			current.apply(move);
+			result.add(current);
+		}
 		return result;
 	}
 }
