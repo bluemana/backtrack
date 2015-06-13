@@ -36,6 +36,8 @@ import java.util.Set;
  * another candidate solution by concatenating the elements of <code>A</code> and the
  * element at the edge.
  * </p>
+ * 
+ * @param E the type of elements of the tuples
  */
 public class Backtracker<E> {
 
