@@ -31,12 +31,11 @@ public class PuzzleSolverTest {
 		Board startBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(startBoardString)), 5, 4);
 		Board targetBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(targetBoardString)), 5, 4);
 		PuzzleSolver solver = new PuzzleSolver();
-		solver.setStartBoard(startBoard);
+		solver.setStart(new BoardTuple(startBoard, null, null, solver));
 		solver.setTargetBoard(targetBoard);
 		solver.setTargetPieceId(1);
 		List<Move> moves = solver.solve();
-		List<Board> solution = PuzzleSolver.boards(startBoard, moves);
-		Assert.assertTrue(solution != null && solution.size() == 1 && solution.get(0).equals(startBoard));
+		Assert.assertTrue(moves.isEmpty());
 	}
 	
 	@Test
@@ -56,11 +55,10 @@ public class PuzzleSolverTest {
 		Board startBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(startBoardString)), 5, 4);
 		Board targetBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(targetBoardString)), 5, 4);
 		PuzzleSolver solver = new PuzzleSolver();
-		solver.setStartBoard(startBoard);
+		solver.setStart(new BoardTuple(startBoard, null, null, solver));
 		solver.setTargetBoard(targetBoard);
 		solver.setTargetPieceId(0);
 		List<Move> moves = solver.solve();
-		List<Board> solution = PuzzleSolver.boards(startBoard, moves);
-		Assert.assertTrue(solution != null && solution.size() - 1 == 93);
+		Assert.assertTrue(moves.size() == 93);
 	}
 }
