@@ -7,13 +7,13 @@ import backtrack.Backtracker;
 import backtrack.example.puzzle.core.Board;
 import backtrack.example.puzzle.core.Move;
 
-public class PuzzleSolver extends Backtracker<Move> {
+public class PuzzleSolver extends Backtracker<BoardTuple, Move> {
 
 	private Board target;
 	private int targetPieceId;
 	
 	public Board getStartBoard() {
-		return ((BoardTuple) getStart()).getBoard();
+		return getStart().getBoard();
 	}
 
 	public Board getTargetBoard() {

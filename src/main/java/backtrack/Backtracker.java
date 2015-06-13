@@ -37,13 +37,13 @@ import java.util.Set;
  * element at the edge.
  * </p>
  * 
- * @param E the type of elements of the tuples
+ * @param <E> the type of elements of the tuples
  */
-public class Backtracker<E> {
+public class Backtracker<T extends Tuple<E>, E> {
 
 	public static final int DEFAULT_MAX_VISITS = 100000;
 	
-	private Tuple<E> start;
+	private T start;
 	private int maxVisits;
 	private int visitsCount;
 	private List<E> result;
@@ -53,11 +53,11 @@ public class Backtracker<E> {
 		visitsCount = -1;
 	}
 	
-	public void setStart(Tuple<E> start) {
+	public void setStart(T start) {
 		this.start = start;
 	}
 	
-	public Tuple<E> getStart() {
+	public T getStart() {
 		return start;
 	}
 	
@@ -77,7 +77,7 @@ public class Backtracker<E> {
 		return solve(start);
 	}
 	
-	private List<E> solve(Tuple<E> start) {
+	private List<E> solve(T start) {
 		Queue<Tuple<E>> traversalQueue = new LinkedList<Tuple<E>>();
 		Set<Tuple<E>> visitedSet = new HashSet<Tuple<E>>();
 		visitsCount = 0;
