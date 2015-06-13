@@ -224,6 +224,10 @@ public class Board {
 	
 	@Override
 	public int hashCode() {
+		return strictHashCode();
+	}
+	
+	public int strictHashCode() {
 		Object[] hash = new Object[pieces.length + positions.length];
 		for (int i = 0; i < pieces.length; i++) {
 			hash[i] = pieces[i];
@@ -234,12 +238,115 @@ public class Board {
 		return Arrays.deepHashCode(hash);
 	}
 	
+	public int shallowHashCode() {
+		Object[] hash = new Object[pieces.length + positions.length];
+		Position[] sortedPositions = Arrays.copyOf(positions, positions.length);
+		Arrays.sort(sortedPositions);
+		for (int i = 0; i < pieces.length; i++) {
+			hash[i] = pieceAt(sortedPositions[i]);
+		}
+		for (int i = 0; i < positions.length; i++) {
+			hash[pieces.length + i] = sortedPositions[i];
+		}
+		return Arrays.deepHashCode(hash);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
+		return equalsStrictly(obj);
+	}
+	
+	/**
+	 * <p>
+	 * Indicates whether this board is strictly equal to the argument object.
+	 * </p>
+	 * <p>
+	 * Two boards are strictly equal if the have the same pieces, and pieces with
+	 * the same ID are at the same positions.
+	 * </p>
+	 * <p>
+	 * For example, these two boards are strictly equal:<br>
+	 * <pre>
+	 * 		0 0 1 1
+	 * 		0 0 2 3
+	 * 		. . 2 3
+	 * 		4 5 5 6
+	 * 		4 7 7 8
+	 * 
+	 * 		0 0 1 1
+	 * 		0 0 2 3
+	 * 		. . 2 3
+	 * 		4 5 5 6
+	 * 		4 7 7 8</pre>
+	 * </p>
+	 * <p>
+	 * <b>Note:</b>
+	 * </p>
+	 * <p>
+	 * Strictly equal objects have equal strict hash codes.
+	 * </p>
+	 * 
+	 * @param obj the object with which to compare
+	 * @return <code>true</code> if this object is strictly equal to the obj argument,
+	 * <code>false</code> otherwise
+	 */
+	public boolean equalsStrictly(Object obj) {
 		boolean result = false;
 		if (obj != null && obj instanceof Board) {
 			Board b = (Board) obj;
 			result = Arrays.deepEquals(pieces, b.pieces) && Arrays.deepEquals(positions, b.positions);
+		}
+		return result;
+	}
+	
+	/**
+	 * <p>
+	 * Indicates whether this board is shallowly equal to the argument object.
+	 * </p>
+	 * <p>
+	 * Two boards are shallowly equal if the have the same pieces, and pieces at
+	 * the same positions are equal.
+	 * </p>
+	 * <p>
+	 * For example, these two boards are shallowly equal:<br>
+	 * <pre>
+	 * 		0 0 2 2
+	 * 		0 0 1 3
+	 * 		. . 1 3
+	 * 		4 7 7 6
+	 * 		4 5 5 8
+	 * 
+	 * 		0 0 1 1
+	 * 		0 0 2 3
+	 * 		. . 2 3
+	 * 		4 5 5 6
+	 * 		4 7 7 8</pre>
+	 * </p>
+	 * <p>
+	 * <b>Note:</b>
+	 * </p>
+	 * <p>
+	 * Shallowly equal objects have equal shallow hash codes.
+	 * </p>
+	 * 
+	 * @param obj the object with which to compare
+	 * @return <code>true</code> if this object is shallowly equal to the obj argument,
+	 * <code>false</code> otherwise
+	 */
+	public boolean equalsShallowly(Object obj) {
+		boolean result = false;
+		if (obj != null && obj instanceof Board) {
+			Board b = (Board) obj;
+			if (rows == b.rows && cols == b.cols && pieces.length == b.pieces.length) {
+				result = true;
+				for (int i = 0; i < pieces.length; i++) {
+					if (!pieces[i].equals(b.pieceAt(positions[i])) ||
+							!positions[i].equals(b.positionOf(b.pieceAt(positions[i])))) {
+						result = false;
+						break;
+					}
+				}
+			}
 		}
 		return result;
 	}

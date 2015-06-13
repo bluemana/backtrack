@@ -3,7 +3,7 @@ package backtrack.example.puzzle.core;
 import java.util.Objects;
 
 
-public class Position {
+public class Position implements Comparable<Position> {
 
 	private final int row;
 	private final int col;
@@ -34,6 +34,27 @@ public class Position {
 		if (obj != null && obj instanceof Position) {
 			Position p = (Position) obj;
 			result = row == p.row && col == p.col;
+		}
+		return result;
+	}
+	
+	@Override
+	public int compareTo(Position p) {
+		int result = -1;
+		if (p != null) {
+			if (row < p.row) {
+				result = -1;
+			} else if (row > p.row) {
+				result = 1;
+			} else {
+				if (col < p.col) {
+					result = -1;
+				} else if (col > p.col) {
+					result = 1;
+				} else {
+					result = 0;
+				}
+			}
 		}
 		return result;
 	}

@@ -163,7 +163,7 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void equals_BoardsWithEqualPiecesEqualIds_Equal() throws IOException {
+	public void strict_BoardsWithEqualPiecesEqualIds_Equal() throws IOException {
 		String boardString1 =
 				"1 1 2 2\n" +
 				"1 1 3 4\n" +
@@ -178,11 +178,11 @@ public class BoardTest {
 				"5 8 8 0\n";
 		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
 		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
-		Assert.assertTrue(board1.equals(board2));
+		Assert.assertTrue(board1.equalsStrictly(board2));
 	}
 	
 	@Test
-	public void equals_BoardsWithEqualPiecesNotEqualIds_NotEqual() throws IOException {
+	public void strict_BoardsWithEqualPiecesNotEqualIds_NotEqual() throws IOException {
 		String boardString1 =
 				"1 1 2 2\n" +
 				"1 1 3 4\n" +
@@ -197,11 +197,11 @@ public class BoardTest {
 				"5 6 6 1\n";
 		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
 		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
-		Assert.assertTrue(!board1.equals(board2));
+		Assert.assertTrue(!board1.equalsStrictly(board2));
 	}
 	
 	@Test
-	public void equals_NotEqualBoards_NotEqual() throws IOException {
+	public void strict_NotEqualBoards_NotEqual() throws IOException {
 		String boardString1 =
 				"1 1 2 2\n" +
 				"2 2 3 3\n" +
@@ -216,11 +216,11 @@ public class BoardTest {
 				"9 8 8 0\n";
 		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
 		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
-		Assert.assertTrue(!board1.equals(board2));
+		Assert.assertTrue(!board1.equalsStrictly(board2));
 	}
 	
 	@Test
-	public void equals_EqualBoards_EqualHashCode() throws IOException {
+	public void strict_EqualBoards_EqualHashCode() throws IOException {
 		String boardString1 =
 				"1 1 2 2\n" +
 				"1 1 3 4\n" +
@@ -235,8 +235,85 @@ public class BoardTest {
 				"5 8 8 0\n";
 		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
 		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
-		Assert.assertTrue(board1.equals(board2));
-		Assert.assertTrue(board1.hashCode() == board2.hashCode());
+		Assert.assertTrue(board1.equalsStrictly(board2));
+		Assert.assertTrue(board1.strictHashCode() == board2.strictHashCode());
+	}
+	
+	@Test
+	public void shallow_BoardsWithEqualPiecesEqualIds_Equal() throws IOException {
+		String boardString1 =
+				"1 1 2 2\n" +
+				"1 1 3 4\n" +
+				". . 3 4\n" +
+				"5 6 6 7\n" +
+				"5 8 8 0\n";
+		String boardString2 =
+				"1 1 2 2\n" +
+				"1 1 3 4\n" +
+				". . 3 4\n" +
+				"5 6 6 7\n" +
+				"5 8 8 0\n";
+		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
+		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
+		Assert.assertTrue(board1.equalsShallowly(board2));
+	}
+	
+	@Test
+	public void shallow_BoardsWithEqualPiecesNotEqualIds_Equal() throws IOException {
+		String boardString1 =
+				"1 1 2 2\n" +
+				"1 1 3 4\n" +
+				". . 3 4\n" +
+				"5 6 6 7\n" +
+				"5 8 8 0\n";
+		String boardString2 =
+				"0 0 2 2\n" +
+				"0 0 4 3\n" +
+				". . 4 3\n" +
+				"5 8 8 7\n" +
+				"5 6 6 1\n";
+		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
+		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
+		Assert.assertTrue(board1.equalsShallowly(board2));
+	}
+	
+	@Test
+	public void shallow_NotEqualBoards_NotEqual() throws IOException {
+		String boardString1 =
+				"1 1 2 2\n" +
+				"2 2 3 3\n" +
+				". . 4 4\n" +
+				"5 5 6 6\n" +
+				"7 7 0 0\n";
+		String boardString2 =
+				"1 2 2 3\n" +
+				"1 4 4 3\n" +
+				". . 5 6\n" +
+				"9 7 5 6\n" +
+				"9 8 8 0\n";
+		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
+		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
+		Assert.assertTrue(!board1.equalsShallowly(board2));
+	}
+	
+	@Test
+	public void shallow_EqualBoards_EqualHashCode() throws IOException {
+		String boardString1 =
+				"1 1 2 2\n" +
+				"1 1 3 4\n" +
+				". . 3 4\n" +
+				"5 6 6 7\n" +
+				"5 8 8 0\n";
+		String boardString2 =
+				"0 0 2 2\n" +
+				"0 0 4 3\n" +
+				". . 4 3\n" +
+				"5 8 8 7\n" +
+				"5 6 6 1\n";
+		Board board1 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString1)), 5, 4);
+		Board board2 = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(boardString2)), 5, 4);
+		Assert.assertTrue(board1.equalsShallowly(board2));
+		Assert.assertTrue(board1.shallowHashCode() == board2.shallowHashCode());
 	}
 	
 	@Test
