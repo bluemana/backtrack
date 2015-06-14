@@ -56,6 +56,13 @@ public interface Tuple<E> {
 	
 	public Tuple<E> previous();
 	
+	/**
+	 * Returns the number of elements in this tuple.
+	 * 
+	 * @return the number of elements in this tuple
+	 */
+	public int size();
+	
 	public String getGraphNodeId();
 	
 	public String getGraphNodeLabel();

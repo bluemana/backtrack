@@ -13,6 +13,7 @@ public class BoardTuple implements Tuple<Move> {
 	private final Move lastMove;
 	private final PuzzleSolver solver;
 	private int visit;
+	private final int size;
 	
 	public BoardTuple(Board board, BoardTuple previousTuple, Move lastMove,
 			PuzzleSolver solver) {
@@ -20,10 +21,21 @@ public class BoardTuple implements Tuple<Move> {
 		this.previousTuple = previousTuple;
 		this.lastMove = lastMove;
 		this.solver = solver;
+		size = lastMove == null ? 0 : previousTuple.size() + 1;
 	}
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	@Override
+	public int getVisit() {
+		return visit;
+	}
+
+	@Override
+	public void setVisit(int visit) {
+		this.visit = visit;
 	}
 
 	@Override
@@ -54,6 +66,11 @@ public class BoardTuple implements Tuple<Move> {
 	}
 	
 	@Override
+	public int size() {
+		return size;
+	}
+	
+	@Override
 	public int hashCode() {
 		return board.shallowHashCode();
 	}
@@ -69,21 +86,6 @@ public class BoardTuple implements Tuple<Move> {
 	}
 	
 	@Override
-	public String toString() {
-		return board.toString();
-	}
-
-	@Override
-	public int getVisit() {
-		return visit;
-	}
-
-	@Override
-	public void setVisit(int visit) {
-		this.visit = visit;
-	}
-
-	@Override
 	public String getGraphNodeId() {
 		return "N" + visit;
 	}
@@ -95,11 +97,16 @@ public class BoardTuple implements Tuple<Move> {
 
 	@Override
 	public String getGraphNodeDescription() {
-		return "Visit #" + visit + "\n" + nextElements().toString();
+		return "Visit #" + visit + "\nLength: " + size + "\n" + nextElements().toString();
 	}
 	
 	@Override
 	public String getGraphEdgeLabel() {
 		return lastMove == null ? null : lastMove.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return board.toString();
 	}
 }
