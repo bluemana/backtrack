@@ -20,6 +20,16 @@ import java.util.List;
  */
 public interface Tuple<E> {
 
+	public int getVisit();
+	
+	/**
+	 * Sets the visit number of this tuple. The visit number is the traversal step
+	 * at which this tuple is visited by the backtracker.
+	 * 
+	 * @param visit the visit number of this tuple
+	 */
+	public void setVisit(int visit);
+	
 	public boolean isSolution();
 	
 	/**
@@ -38,7 +48,7 @@ public interface Tuple<E> {
 	 * Returns the last element that was used to construct this tuple.
 	 * 
 	 * @return the last element that was used to construct this tuple, or
-	 * <code>null</code> if this is the empty tuple.
+	 * <code>null</code> if this is the empty tuple
 	 */
 	public E lastElement();
 	
@@ -46,15 +56,16 @@ public interface Tuple<E> {
 	
 	public Tuple<E> previous();
 	
-	public int getVisitId();
-	
-	public void setVisitId(int visitId);
-	
 	public String getGraphNodeId();
 	
 	public String getGraphNodeLabel();
 	
 	public String getGraphNodeDescription();
 	
-	public String getGraphEdgeId();
+	/**
+	 * Returns the edge label of the last element used to construct this tuple.
+	 * 
+	 * @return the edge label of the last element used to construct this tuple
+	 */
+	public String getGraphEdgeLabel();
 }

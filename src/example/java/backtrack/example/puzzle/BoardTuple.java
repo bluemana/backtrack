@@ -12,7 +12,7 @@ public class BoardTuple implements Tuple<Move> {
 	private final BoardTuple previousTuple;
 	private final Move lastMove;
 	private final PuzzleSolver solver;
-	private int visitId;
+	private int visit;
 	
 	public BoardTuple(Board board, BoardTuple previousTuple, Move lastMove,
 			PuzzleSolver solver) {
@@ -74,18 +74,18 @@ public class BoardTuple implements Tuple<Move> {
 	}
 
 	@Override
-	public int getVisitId() {
-		return visitId;
+	public int getVisit() {
+		return visit;
 	}
 
 	@Override
-	public void setVisitId(int visitId) {
-		this.visitId = visitId;
+	public void setVisit(int visit) {
+		this.visit = visit;
 	}
 
 	@Override
 	public String getGraphNodeId() {
-		return "N" + visitId;
+		return "N" + visit;
 	}
 
 	@Override
@@ -95,11 +95,11 @@ public class BoardTuple implements Tuple<Move> {
 
 	@Override
 	public String getGraphNodeDescription() {
-		return "Visit ID: " + visitId + "\n" + nextElements().toString();
+		return "Visit #" + visit + "\n" + nextElements().toString();
 	}
 	
 	@Override
-	public String getGraphEdgeId() {
-		return lastElement() == null ? null : lastElement().toString();
+	public String getGraphEdgeLabel() {
+		return lastMove == null ? null : lastMove.toString();
 	}
 }

@@ -100,7 +100,7 @@ public class Backtracker<T extends Tuple<E>, E> {
 			if (visitsCount < maxVisits && !visitedSet.contains(current)) {
 				// Mark as visited
 				visitedSet.add(current);
-				current.setVisitId(visitsCount);
+				current.setVisit(visitsCount);
 				visitsCount++;
 				// Write graph
 				writeGraphNode(current);
@@ -122,7 +122,7 @@ public class Backtracker<T extends Tuple<E>, E> {
 		if (graphFormat != null) {
 			graphFormat.writeNode(node.getGraphNodeId(), node.getGraphNodeLabel(), node.getGraphNodeDescription());
 			if (node.previous() != null) {
-				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeId());
+				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeLabel());
 			}
 		}
 	}
