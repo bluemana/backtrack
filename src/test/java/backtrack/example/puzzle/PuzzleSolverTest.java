@@ -1,6 +1,9 @@
 package backtrack.example.puzzle;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -8,6 +11,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import backtrack.GraphFormat;
 import backtrack.example.puzzle.core.Board;
 import backtrack.example.puzzle.core.Move;
 import backtrack.example.puzzle.util.StandardFormatUtils;
@@ -39,7 +43,7 @@ public class PuzzleSolverTest {
 	}
 	
 	@Test
-	public void solve_Quzzle_SolutionOf93Moves() throws Exception {
+	public void solve_Quzzle_SolutionOf93Moves() throws IOException {
 		String startBoardString =
 				"0 0 1 1\n" +
 				"0 0 2 3\n" +
@@ -60,5 +64,36 @@ public class PuzzleSolverTest {
 		solver.setTargetPieceId(0);
 		List<Move> moves = solver.solve();
 		Assert.assertTrue(moves.size() == 93);
+	}
+	
+	/**
+	 * A convenience method for writing to a file the traversal graph of the Quzzle.
+	 * 
+	 * @throws IOException if an I/O exception occurs
+	 */
+	@Test
+	public void graph_Quzzle_Written() throws IOException {
+		String startBoardString =
+				"0 0 1 1\n" +
+				"0 0 2 3\n" +
+				". . 2 3\n" +
+				"4 5 5 6\n" +
+				"4 7 7 8\n";
+		String targetBoardString =
+				"1 1 0 0\n" +
+				"3 2 0 0\n" +
+				"3 2 . .\n" +
+				"6 5 5 4\n" +
+				"8 7 7 4\n";
+		Board startBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(startBoardString)), 5, 4);
+		Board targetBoard = StandardFormatUtils.parseBoard(new BufferedReader(new StringReader(targetBoardString)), 5, 4);
+		PuzzleSolver solver = new PuzzleSolver();
+		solver.setStart(new BoardTuple(startBoard, null, null, solver));
+		solver.setTargetBoard(targetBoard);
+		solver.setTargetPieceId(0);
+		File output = new File("quzzle_traversal.graphml");
+		solver.setGraphFormat(new GraphFormat(new BufferedWriter(new FileWriter(output))));
+		solver.solve();
+		Assert.assertTrue(output.exists());
 	}
 }

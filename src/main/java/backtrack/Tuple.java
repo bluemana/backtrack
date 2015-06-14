@@ -45,4 +45,16 @@ public interface Tuple<E> {
 	public Tuple<E> next(E element);
 	
 	public Tuple<E> previous();
+	
+	public int getVisitId();
+	
+	public void setVisitId(int visitId);
+	
+	public String getGraphNodeId();
+	
+	public String getGraphNodeLabel();
+	
+	public String getGraphNodeDescription();
+	
+	public String getGraphEdgeId();
 }

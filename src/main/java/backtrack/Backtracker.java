@@ -1,5 +1,6 @@
 package backtrack;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ public class Backtracker<T extends Tuple<E>, E> {
 	private int maxVisits;
 	private int visitsCount;
 	private List<E> result;
+	private GraphFormat graphFormat;
 	
 	public Backtracker() {
 		maxVisits = DEFAULT_MAX_VISITS;
@@ -73,11 +75,22 @@ public class Backtracker<T extends Tuple<E>, E> {
 		return visitsCount;
 	}
 	
-	public List<E> solve() {
-		return solve(start);
+	public void setGraphFormat(GraphFormat graphFormat) {
+		this.graphFormat = graphFormat;
 	}
 	
-	private List<E> solve(T start) {
+	public List<E> solve() throws IOException {
+		if (graphFormat != null) {
+			graphFormat.open("G");
+		}
+		List<E> result = solve(start);
+		if (graphFormat != null) {
+			graphFormat.close();
+		}
+		return result;
+	}
+	
+	private List<E> solve(T start) throws IOException {
 		Queue<Tuple<E>> traversalQueue = new LinkedList<Tuple<E>>();
 		Set<Tuple<E>> visitedSet = new HashSet<Tuple<E>>();
 		visitsCount = 0;
@@ -87,7 +100,10 @@ public class Backtracker<T extends Tuple<E>, E> {
 			if (visitsCount < maxVisits && !visitedSet.contains(current)) {
 				// Mark as visited
 				visitedSet.add(current);
+				current.setVisitId(visitsCount);
 				visitsCount++;
+				// Write graph
+				writeGraphNode(current);
 				// Continue
 				if (!current.isSolution()) {
 					for (E e : current.nextElements()) {
@@ -100,6 +116,15 @@ public class Backtracker<T extends Tuple<E>, E> {
 			}
 		}
 		return result;
+	}
+	
+	private void writeGraphNode(Tuple<E> node) throws IOException {
+		if (graphFormat != null) {
+			graphFormat.writeNode(node.getGraphNodeId(), node.getGraphNodeLabel(), node.getGraphNodeDescription());
+			if (node.previous() != null) {
+				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeId());
+			}
+		}
 	}
 	
 	private List<E> path(Tuple<E> last) {
