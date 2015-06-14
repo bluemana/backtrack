@@ -42,19 +42,8 @@ public class Position implements Comparable<Position> {
 	public int compareTo(Position p) {
 		int result = -1;
 		if (p != null) {
-			if (row < p.row) {
-				result = -1;
-			} else if (row > p.row) {
-				result = 1;
-			} else {
-				if (col < p.col) {
-					result = -1;
-				} else if (col > p.col) {
-					result = 1;
-				} else {
-					result = 0;
-				}
-			}
+			result = row - p.row;
+			result = result != 0 ? result : col - p.col;
 		}
 		return result;
 	}
