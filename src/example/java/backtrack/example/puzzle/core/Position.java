@@ -40,12 +40,8 @@ public class Position implements Comparable<Position> {
 	
 	@Override
 	public int compareTo(Position p) {
-		int result = -1;
-		if (p != null) {
-			result = row - p.row;
-			result = result != 0 ? result : col - p.col;
-		}
-		return result;
+		int result = row - p.row;
+		return result != 0 ? result : col - p.col;
 	}
 	
 	@Override
