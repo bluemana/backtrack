@@ -40,7 +40,7 @@ public class BoardTuple implements Tuple<Move> {
 
 	@Override
 	public boolean isSolution() {
-		return board.equals(solver.getTargetBoard(), solver.getTargetPieceId());
+		return board.equals(solver.getTarget(), solver.getTargetPieceId());
 	}
 
 	@Override

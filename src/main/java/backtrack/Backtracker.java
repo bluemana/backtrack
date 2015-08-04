@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -40,7 +39,7 @@ import java.util.Set;
  * 
  * @param <E> the type of elements of the tuples
  */
-public class Backtracker<T extends Tuple<E>, E> {
+public abstract class Backtracker<T extends Tuple<E>, E> {
 
 	public static final int DEFAULT_MAX_VISITS = 100000;
 	
@@ -54,6 +53,8 @@ public class Backtracker<T extends Tuple<E>, E> {
 		maxVisits = DEFAULT_MAX_VISITS;
 		visitsCount = -1;
 	}
+	
+	protected abstract Queue<Tuple<E>> getTraversalQueue();
 	
 	public void setStart(T start) {
 		this.start = start;
@@ -91,8 +92,9 @@ public class Backtracker<T extends Tuple<E>, E> {
 	}
 	
 	private List<E> solve(T start) throws IOException {
-		Queue<Tuple<E>> traversalQueue = new LinkedList<Tuple<E>>();
+		Queue<Tuple<E>> traversalQueue = getTraversalQueue();
 		Set<Tuple<E>> visitedSet = new HashSet<Tuple<E>>();
+		traversalQueue.clear();
 		visitsCount = 0;
 		traversalQueue.add(start);
 		while (!traversalQueue.isEmpty()) {
