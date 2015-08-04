@@ -97,9 +97,9 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 		traversalQueue.clear();
 		visitsCount = 0;
 		traversalQueue.add(start);
-		while (!traversalQueue.isEmpty()) {
+		while (!traversalQueue.isEmpty() && visitsCount < maxVisits) {
 			Tuple<E> current = traversalQueue.poll();
-			if (visitsCount < maxVisits && !visitedSet.contains(current)) {
+			if (!visitedSet.contains(current)) {
 				// Mark as visited
 				visitedSet.add(current);
 				current.setVisit(visitsCount);
