@@ -51,7 +51,6 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 	private int visitsCount;
 	private List<E> result;
 	private final Set<Tuple<E>> visitedSet;
-	private GraphFormat graphFormat;
 	
 	public Backtracker() {
 		maxVisits = DEFAULT_MAX_VISITS;
@@ -81,21 +80,11 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 		return visitsCount;
 	}
 	
-	public void setGraphFormat(GraphFormat graphFormat) {
-		this.graphFormat = graphFormat;
+	public List<E> solve() {
+		return solve(start);
 	}
 	
-	public List<E> solve() throws IOException {
-		List<E> result = solve(start);
-		if (graphFormat != null) {
-			graphFormat.open("G");
-			writeGraph(visitedSet);
-			graphFormat.close();
-		}
-		return result;
-	}
-	
-	private List<E> solve(T start) throws IOException {
+	private List<E> solve(T start) {
 		Queue<Tuple<E>> traversalQueue = getTraversalQueue();
 		traversalQueue.clear();
 		visitedSet.clear();
@@ -107,11 +96,11 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 				// Mark as visited
 				visitsCount++;
 				visitedSet.add(current);
-				current.setVisit(visitsCount);
+				current.setVisitId(visitsCount);
 				// Continue
 				if (!current.isSolution()) {
-					for (E e : current.nextElements()) {
-						traversalQueue.add(current.next(e));
+					for (Tuple<E> next : current.next()) {
+						traversalQueue.add(next);
 					}
 				} else {
 					updateSolutionPath(current);
@@ -140,13 +129,23 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 		return result;
 	}
 	
-	private void writeGraph(Set<Tuple<E>> visitedSet) throws IOException {
+	public List<E> getResult() {
+		return result;
+	}
+	
+	public void writeGraph(GraphFormat graphFormat) throws IOException {
+		graphFormat.open("G");
+		writeGraph(graphFormat, visitedSet);
+		graphFormat.close();
+	}
+	
+	private void writeGraph(GraphFormat graphFormat, Set<Tuple<E>> visitedSet) throws IOException {
 		for (Tuple<E> tuple : visitedSet) {
-			writeGraphNode(tuple);
+			writeGraphNode(graphFormat, tuple);
 		}
 	}
 	
-	private void writeGraphNode(Tuple<E> node) throws IOException {
+	private void writeGraphNode(GraphFormat graphFormat, Tuple<E> node) throws IOException {
 		if (graphFormat != null) {
 			Color nodeColor = node.isPartOfSolution() ? SOLUTION_NODE_COLOR : NODE_COLOR;
 			graphFormat.writeNode(node.getGraphNodeId(), node.getGraphNodeLabel(), node.getGraphNodeDescription(), nodeColor);
@@ -154,9 +153,5 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeLabel());
 			}
 		}
-	}
-	
-	public List<E> getResult() {
-		return result;
 	}
 }

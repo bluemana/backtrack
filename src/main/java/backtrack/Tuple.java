@@ -19,34 +19,13 @@ import java.util.List;
  * @param <E> the type of elements of this tuple
  */
 public interface Tuple<E> {
-
-	public int getVisit();
 	
 	/**
-	 * Sets the visit number of this tuple. The visit number is the traversal step
-	 * at which this tuple is visited by the backtracker.
+	 * Returns the number of elements in this tuple.
 	 * 
-	 * @param visit the visit number of this tuple
+	 * @return the number of elements in this tuple
 	 */
-	public void setVisit(int visit);
-	
-	public boolean isSolution();
-	
-	public boolean isPartOfSolution();
-	
-	public void setPartOfSolution(boolean partOfSolution);
-	
-	/**
-	 * <p>
-	 * Returns the elements that can be used to construct the next tuple.
-	 * </p>
-	 * <p>
-	 * The elements are traversed in the order given by the list.
-	 * </p>
-	 * 
-	 * @return the elements that can be used to construct the next tuple
-	 */
-	public List<E> nextElements();
+	public int size();
 	
 	/**
 	 * Returns the last element that was used to construct this tuple.
@@ -56,16 +35,25 @@ public interface Tuple<E> {
 	 */
 	public E lastElement();
 	
-	public Tuple<E> next(E element);
-	
 	public Tuple<E> previous();
 	
+	public List<Tuple<E>> next();
+	
 	/**
-	 * Returns the number of elements in this tuple.
+	 * Returns the visit ID of this tuple.
 	 * 
-	 * @return the number of elements in this tuple
+	 * @return the visit ID of this tuple, or <code>-1</code> if this tuple has
+	 * not been visited
 	 */
-	public int size();
+	public int getVisitId();
+	
+	public void setVisitId(int visitId);
+	
+	public boolean isSolution();
+	
+	public boolean isPartOfSolution();
+	
+	public void setPartOfSolution(boolean partOfSolution);
 	
 	public String getGraphNodeId();
 	

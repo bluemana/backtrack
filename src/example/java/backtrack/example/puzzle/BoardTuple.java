@@ -1,5 +1,6 @@
 package backtrack.example.puzzle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import backtrack.Tuple;
@@ -12,17 +13,21 @@ public class BoardTuple implements Tuple<Move> {
 	private final BoardTuple previousTuple;
 	private final Move lastMove;
 	private final PuzzleSolver solver;
-	private int visit;
+	private int visitId;
 	private final int size;
 	private boolean partOfSolution;
 	
-	public BoardTuple(Board board, BoardTuple previousTuple, Move lastMove,
+	public BoardTuple(Board board, PuzzleSolver solver) {
+		this(board, null, null, solver);
+	}
+	
+	private BoardTuple(Board board, BoardTuple previousTuple, Move lastMove,
 			PuzzleSolver solver) {
 		this.board = board;
 		this.previousTuple = previousTuple;
 		this.lastMove = lastMove;
 		this.solver = solver;
-		visit = -1;
+		visitId = -1;
 		size = lastMove == null ? 0 : previousTuple.size() + 1;
 	}
 	
@@ -31,13 +36,43 @@ public class BoardTuple implements Tuple<Move> {
 	}
 	
 	@Override
-	public int getVisit() {
-		return visit;
+	public int size() {
+		return size;
+	}
+	
+	@Override
+	public Move lastElement() {
+		return lastMove;
+	}
+	
+	@Override
+	public Tuple<Move> previous() {
+		return previousTuple;
+	}
+	
+	@Override
+	public List<Tuple<Move>> next() {
+		List<Tuple<Move>> result = new ArrayList<Tuple<Move>>();
+		for (Move move : board.moves()) {
+			result.add(next(move));
+		}
+		return result;
+	}
+	
+	private BoardTuple next(Move move) {
+		Board next = new Board(board);
+		next.apply(move);
+		return new BoardTuple(next, this, move, solver);
+	}
+	
+	@Override
+	public int getVisitId() {
+		return visitId;
 	}
 
 	@Override
-	public void setVisit(int visit) {
-		this.visit = visit;
+	public void setVisitId(int visitId) {
+		this.visitId = visitId;
 	}
 
 	@Override
@@ -56,33 +91,6 @@ public class BoardTuple implements Tuple<Move> {
 	}
 
 	@Override
-	public List<Move> nextElements() {
-		return board.moves();
-	}
-	
-	@Override
-	public Move lastElement() {
-		return lastMove;
-	}
-
-	@Override
-	public Tuple<Move> next(Move move) {
-		Board next = new Board(board);
-		next.apply(move);
-		return new BoardTuple(next, this, move, solver);
-	}
-
-	@Override
-	public Tuple<Move> previous() {
-		return previousTuple;
-	}
-	
-	@Override
-	public int size() {
-		return size;
-	}
-	
-	@Override
 	public int hashCode() {
 		return board.shallowHashCode();
 	}
@@ -99,7 +107,7 @@ public class BoardTuple implements Tuple<Move> {
 	
 	@Override
 	public String getGraphNodeId() {
-		return "N" + visit;
+		return "N" + visitId;
 	}
 
 	@Override
@@ -109,7 +117,7 @@ public class BoardTuple implements Tuple<Move> {
 
 	@Override
 	public String getGraphNodeDescription() {
-		return "Visit #" + visit + "\nLength: " + size + "\n" + nextElements().toString();
+		return "Visit #" + visitId + "\nLength: " + size + "\n" + board.moves().toString();
 	}
 	
 	@Override

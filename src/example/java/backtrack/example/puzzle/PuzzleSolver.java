@@ -1,6 +1,5 @@
 package backtrack.example.puzzle;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +46,8 @@ public class PuzzleSolver {
 		return backtracker;
 	}
 	
-	public List<Move> solve() throws IOException {
-		BoardTuple startTuple = new BoardTuple(start, null, null, this);
+	public List<Move> solve() {
+		BoardTuple startTuple = new BoardTuple(start, this);
 		backtracker.setStart(startTuple);
 		return backtracker.solve();
 	}

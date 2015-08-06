@@ -97,8 +97,8 @@ public class PuzzleSolverTest {
 		solver.setTargetPieceId(0);
 		solver.setBacktracker(new BfsBacktracker<BoardTuple, Move>());
 		File output = new File("quzzle_bfs_traversal.graphml");
-		solver.getBacktracker().setGraphFormat(new GraphFormat(new BufferedWriter(new FileWriter(output))));
 		solver.solve();
+		solver.getBacktracker().writeGraph(new GraphFormat(new BufferedWriter(new FileWriter(output))));
 		Assert.assertTrue(output.exists());
 	}
 	
@@ -179,8 +179,8 @@ public class PuzzleSolverTest {
 		solver.setTargetPieceId(0);
 		solver.setBacktracker(new DfsBacktracker<BoardTuple, Move>());
 		File output = new File("quzzle_dfs_traversal.graphml");
-		solver.getBacktracker().setGraphFormat(new GraphFormat(new BufferedWriter(new FileWriter(output))));
 		solver.solve();
+		solver.getBacktracker().writeGraph(new GraphFormat(new BufferedWriter(new FileWriter(output))));
 		Assert.assertTrue(output.exists());
 	}
 }
