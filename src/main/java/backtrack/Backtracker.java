@@ -37,6 +37,13 @@ import java.util.Set;
  * another candidate solution by concatenating the elements of <code>A</code> and the
  * element at the edge.
  * </p>
+ * <p>
+ * <b>Usage</b>
+ * </p>
+ * <p>
+ * The final state of the computation can be reused to retrieve the last computed result
+ * ({@link #getResult()}) or to write the traversal to graph format ({@link #writeGraph(GraphFormat)}).
+ * </p>
  * 
  * @param <E> the type of elements of the tuples
  */
