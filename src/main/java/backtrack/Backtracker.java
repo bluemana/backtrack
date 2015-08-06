@@ -1,5 +1,6 @@
 package backtrack;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,16 +43,20 @@ import java.util.Set;
 public abstract class Backtracker<T extends Tuple<E>, E> {
 
 	public static final int DEFAULT_MAX_VISITS = 100000;
+	private static final Color NODE_COLOR = new Color(0xCCCCFF);
+	private static final Color SOLUTION_NODE_COLOR = new Color(0xFFCC00);
 	
 	private T start;
 	private int maxVisits;
 	private int visitsCount;
 	private List<E> result;
+	private final Set<Tuple<E>> visitedSet;
 	private GraphFormat graphFormat;
 	
 	public Backtracker() {
 		maxVisits = DEFAULT_MAX_VISITS;
 		visitsCount = -1;
+		visitedSet = new HashSet<Tuple<E>>();
 	}
 	
 	protected abstract Queue<Tuple<E>> getTraversalQueue();
@@ -81,11 +86,10 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 	}
 	
 	public List<E> solve() throws IOException {
-		if (graphFormat != null) {
-			graphFormat.open("G");
-		}
 		List<E> result = solve(start);
 		if (graphFormat != null) {
+			graphFormat.open("G");
+			writeGraph(visitedSet);
 			graphFormat.close();
 		}
 		return result;
@@ -93,25 +97,24 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 	
 	private List<E> solve(T start) throws IOException {
 		Queue<Tuple<E>> traversalQueue = getTraversalQueue();
-		Set<Tuple<E>> visitedSet = new HashSet<Tuple<E>>();
 		traversalQueue.clear();
+		visitedSet.clear();
 		visitsCount = 0;
 		traversalQueue.add(start);
 		while (!traversalQueue.isEmpty() && visitsCount < maxVisits) {
 			Tuple<E> current = traversalQueue.poll();
 			if (!visitedSet.contains(current)) {
 				// Mark as visited
+				visitsCount++;
 				visitedSet.add(current);
 				current.setVisit(visitsCount);
-				visitsCount++;
-				// Write graph
-				writeGraphNode(current);
 				// Continue
 				if (!current.isSolution()) {
 					for (E e : current.nextElements()) {
 						traversalQueue.add(current.next(e));
 					}
 				} else {
+					updateSolutionPath(current);
 					result = path(current);
 					break;
 				}
@@ -120,13 +123,10 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 		return result;
 	}
 	
-	private void writeGraphNode(Tuple<E> node) throws IOException {
-		if (graphFormat != null) {
-			graphFormat.writeNode(node.getGraphNodeId(), node.getGraphNodeLabel(), node.getGraphNodeDescription());
-			if (node.previous() != null) {
-				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeLabel());
-			}
-		}
+	private void updateSolutionPath(Tuple<E> solution) {
+		do {
+			solution.setPartOfSolution(true);
+		} while ((solution = solution.previous()) != null);
 	}
 	
 	private List<E> path(Tuple<E> last) {
@@ -138,6 +138,22 @@ public abstract class Backtracker<T extends Tuple<E>, E> {
 		}
 		Collections.reverse(result);
 		return result;
+	}
+	
+	private void writeGraph(Set<Tuple<E>> visitedSet) throws IOException {
+		for (Tuple<E> tuple : visitedSet) {
+			writeGraphNode(tuple);
+		}
+	}
+	
+	private void writeGraphNode(Tuple<E> node) throws IOException {
+		if (graphFormat != null) {
+			Color nodeColor = node.isPartOfSolution() ? SOLUTION_NODE_COLOR : NODE_COLOR;
+			graphFormat.writeNode(node.getGraphNodeId(), node.getGraphNodeLabel(), node.getGraphNodeDescription(), nodeColor);
+			if (node.previous() != null) {
+				graphFormat.writeEdge(node.previous().getGraphNodeId(), node.getGraphNodeId(), node.getGraphEdgeLabel());
+			}
+		}
 	}
 	
 	public List<E> getResult() {

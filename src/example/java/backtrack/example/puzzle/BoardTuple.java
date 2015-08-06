@@ -14,6 +14,7 @@ public class BoardTuple implements Tuple<Move> {
 	private final PuzzleSolver solver;
 	private int visit;
 	private final int size;
+	private boolean partOfSolution;
 	
 	public BoardTuple(Board board, BoardTuple previousTuple, Move lastMove,
 			PuzzleSolver solver) {
@@ -21,6 +22,7 @@ public class BoardTuple implements Tuple<Move> {
 		this.previousTuple = previousTuple;
 		this.lastMove = lastMove;
 		this.solver = solver;
+		visit = -1;
 		size = lastMove == null ? 0 : previousTuple.size() + 1;
 	}
 	
@@ -41,6 +43,16 @@ public class BoardTuple implements Tuple<Move> {
 	@Override
 	public boolean isSolution() {
 		return board.equals(solver.getTarget(), solver.getTargetPieceId());
+	}
+	
+	@Override
+	public boolean isPartOfSolution() {
+		return partOfSolution;
+	}
+	
+	@Override
+	public void setPartOfSolution(boolean partOfSolution) {
+		this.partOfSolution = partOfSolution;
 	}
 
 	@Override

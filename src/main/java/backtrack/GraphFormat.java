@@ -1,5 +1,6 @@
 package backtrack;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -57,10 +58,13 @@ public class GraphFormat {
 		writer.write(String.format("  <graph id=\"%s\" edgedefault=\"directed\">\n", name));
 	}
 	
-	public void writeNode(String id, String label, String description) throws IOException {
+	public void writeNode(String id, String label, String description, Color color) throws IOException {
 		writer.write(String.format("    <node id=\"%s\">\n", id));
 		writer.write("      <data key=\"key0\">\n");
 		writer.write("        <y:ShapeNode>\n");
+		if (color != null) {
+			writer.write(String.format("          <y:Fill color=\"%s\" transparent=\"false\"/>\n", getHtmlColor(color)));
+		}
 		writer.write(String.format("          <y:NodeLabel alignment=\"center\" fontFamily=\"Courier New\" fontSize=\"12\" fontStyle=\"plain\">%s</y:NodeLabel>\n", label));
 		writer.write("        </y:ShapeNode>\n");
 		writer.write("      </data>\n");
@@ -68,6 +72,10 @@ public class GraphFormat {
 			writer.write(String.format("      <data key=\"key1\"><![CDATA[%s]]></data>\n", description));
 		}
 		writer.write("    </node>\n");
+	}
+	
+	private static String getHtmlColor(Color color) {
+		return "#" + Integer.toHexString(color.getRGB()).substring(2, 8);
 	}
 	
 	public void writeEdge(String sourceId, String targetId, String label) throws IOException {

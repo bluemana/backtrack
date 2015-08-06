@@ -32,6 +32,10 @@ public interface Tuple<E> {
 	
 	public boolean isSolution();
 	
+	public boolean isPartOfSolution();
+	
+	public void setPartOfSolution(boolean partOfSolution);
+	
 	/**
 	 * <p>
 	 * Returns the elements that can be used to construct the next tuple.
